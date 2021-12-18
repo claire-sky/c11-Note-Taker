@@ -9,25 +9,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-const getNotes = (formData = {}) => {
-    let queryUrl = '/api/notes';
-  
-    Object.entries(formData).forEach(([key, value]) => {
-      queryUrl += `${key}=${value}&`;
-    });
-  
-    fetch(queryUrl)
-      .then(response => {
-        if (!response.ok) {
-          return alert('Error: ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then(noteData => {
-        console.log(noteData);
-        printResults(noteData);
-      });
-  };
+function createNewNote(body, notesArray) {
+    const note = body;
+    notesArray.push(note);
+    fs.writeFileSync(
+        path.join(__dirname, './db/db.json'),
+        JSON.stringify({ notes: notesArray }, null, 2)
+    );
+    // return finished code to post route for response
+    return note;
+};
+
+app.post("/notes", (req, res) => {
+    const note = createNewNote(req.body, animals);
+    res.json(note);
+  });
 
 app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, './public/notes.html'));
