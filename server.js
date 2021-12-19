@@ -17,10 +17,14 @@ function createNewNote(body, notesArray) {
         JSON.stringify({ notes: notesArray }, null, 2)
     );
     // return finished code to post route for response
+    console.log()
     return note;
 };
 
 app.post("/notes", (req, res) => {
+    // set id based on what the next index of the array will be
+    req.body.id = notes.length.toString(16);
+
     const note = createNewNote(req.body, animals);
     res.json(note);
   });
