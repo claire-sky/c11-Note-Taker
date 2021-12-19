@@ -23,18 +23,25 @@ function createNewNote(body, notesArray) {
 // posts new notes to site
 app.post('/api/notes', (req, res) => {
     // sets id for each note
-    req.body.id = Math.floor(Math.random() * 10000).toString();
+    req.body.id = Math.floor(Math.random() * 100000).toString();
 
     const note = createNewNote(req.body, notes);
     res.json(note);
-  });
+});
 
-app.get('/api/notes', (req, res) => {
+// deletes notes by id
+app.delete('/api/notes/:id', (req, res) => {
+    var notesArray = notes.filter(({ id }) => id !== req.params.id);
+
+    fs.writeFileSync(
+        path.join(__dirname, './db/db.json'),
+        JSON.stringify({ notes: notesArray }, null, 2)
+    );
     res.json(notes);
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/index.html'));
+app.get('/api/notes', (req, res) => {
+    res.json(notes);
 });
 
 app.get('/notes', (req, res) => {
