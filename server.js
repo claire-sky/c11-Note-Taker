@@ -21,7 +21,7 @@ function createNewNote(body, notesArray) {
 };
 
 // posts new notes to site
-app.post("/notes", (req, res) => {
+app.post("/api/notes", (req, res) => {
     // sets id for each note
     req.body.id = notes.length.toString(16);
     console.log(notes.length.toString(16));
