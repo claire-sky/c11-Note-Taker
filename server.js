@@ -31,14 +31,14 @@ app.post('/api/notes', (req, res) => {
 
 // deletes notes by id
 app.delete('/api/notes/:id', (req, res) => {
-    var notesArray = notes.filter(({ id }) => id !== req.params.id);
-
+    var notesArray = notes.filter(({ id }) => id !== req.params.id)
+    console.log({ notes: notesArray });
     fs.writeFileSync(
         path.join(__dirname, './db/db.json'),
         JSON.stringify({ notes: notesArray }, null, 2)
-    );
-    res.json(notes);
-});
+    )
+    return notes;
+})
 
 app.get('/api/notes', (req, res) => {
     res.json(notes);
